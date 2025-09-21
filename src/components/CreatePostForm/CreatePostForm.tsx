@@ -1,11 +1,45 @@
-import * as Yup from "yup";
+// import * as Yup from "yup";
 import { Field, Form, Formik, FormikHelpers, ErrorMessage } from "formik";
 
 import css from "./CreatePostForm.module.css";
+import { NewPost } from "../../types/post";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createPost } from "../../services/postService";
 
-export default function PostForm() {
+const initalValues: NewPost = {
+  title: "",
+  body: "",
+};
+
+interface CreatePostFormProps {
+  onClose: () => void;
+}
+
+export default function CreatePostForm({ onClose }: CreatePostFormProps) {
+  const queryClient = useQueryClient();
+
+  const createMutation = useMutation({
+    mutationKey: ["posts"],
+    mutationFn: createPost,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["posts"],
+      });
+      onClose();
+    },
+  });
+
+  const onSubmit = (values: NewPost, actions: FormikHelpers<NewPost>) => {
+    createMutation.mutate(values);
+    actions.resetForm();
+  };
+
   return (
-    <Formik initialValues={} onSubmit={} validationSchema={}>
+    <Formik
+      initialValues={initalValues}
+      onSubmit={onSubmit}
+      // validationSchema={{}}
+    >
       <Form className={css.form}>
         <div className={css.formGroup}>
           <label htmlFor="title">Title</label>
@@ -20,10 +54,10 @@ export default function PostForm() {
         </div>
 
         <div className={css.actions}>
-          <button type="button" className={css.cancelButton}>
+          <button type="button" className={css.cancelButton} onClick={onClose}>
             Cancel
           </button>
-          <button type="submit" className={css.submitButton} disabled={}>
+          <button type="submit" className={css.submitButton} disabled={createMutation.isPending}>
             Create post
           </button>
         </div>
