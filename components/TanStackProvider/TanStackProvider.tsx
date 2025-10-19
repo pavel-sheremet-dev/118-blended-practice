@@ -1,9 +1,20 @@
 'use client';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useState } from 'react';
+import { isServer, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+let browserQueryClient: QueryClient | undefined = undefined;
+
+function getQueryClient() {
+  if (isServer) {
+    return new QueryClient();
+  } else {
+    if (!browserQueryClient) browserQueryClient = new QueryClient();
+    return browserQueryClient;
+  }
+}
 
 export default function TanStackProvider({ children }: { children: React.ReactNode }) {
-  const [queryClient] = useState(() => new QueryClient());
+  const queryClient = getQueryClient();
+
   return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 }
