@@ -3,13 +3,11 @@
 import { Field, Form, Formik, FormikHelpers } from "formik";
 
 import Section from "@/components/Section/Section";
+import { UserCredentials } from "@/types/user";
+import { registerUser } from "@/lib/api/clientApi";
+import { useRouter } from "next/navigation";
 
-interface AuthUserData {
-  email: string;
-  password: string;
-}
-
-const initialValues: AuthUserData = {
+const initialValues: UserCredentials = {
   email: "",
   password: "",
 };
@@ -19,12 +17,16 @@ export default function SignUp() {
   // 2. оновлення стану аутентифікації
   // 3. редірект
 
+  const router = useRouter();
+
   const onSubmit = async (
-    values: AuthUserData,
-    actions: FormikHelpers<AuthUserData>
+    values: UserCredentials,
+    actions: FormikHelpers<UserCredentials>
   ) => {
-    console.log("values", values);
+    const newUser = await registerUser(values);
+    console.log("newUser", newUser);
     actions.resetForm();
+    router.push("/profile");
   };
 
   return (
@@ -34,7 +36,7 @@ export default function SignUp() {
         <Form style={{ display: "grid", gap: 12, maxWidth: 300 }}>
           <div style={{ display: "grid", gap: 8 }}>
             <label htmlFor="email">Email</label>
-            <Field type="email" name="email" id="email" required />
+            <Field type="text" name="email" id="email" required />
           </div>
           <div style={{ display: "grid", gap: 8 }}>
             <label htmlFor="password">Password</label>

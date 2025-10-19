@@ -8,7 +8,7 @@ import Section from "@/components/Section/Section";
 import NotesClient from "./Notes.client";
 
 import { Tag } from "@/types/note";
-import { fetchNotes } from "@/lib/api";
+import { fetchNotes } from "@/lib/api/serverApi";
 
 interface NotesPageProps {
   params: Promise<{ slug: string[] }>;

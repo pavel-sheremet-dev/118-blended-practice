@@ -10,9 +10,12 @@ import { usePathname } from "next/navigation";
 
 import AuthNavigation from "../AuthNavigation/AuthNavigation";
 import { buildLinkClassName } from "@/lib/buildLinkClassName/buildLinkClassName";
+import { useAuthStore } from "@/lib/store/authStore";
 
 const Header = () => {
   const pathname = usePathname();
+
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   return (
     <header className={styles.header}>
@@ -30,14 +33,16 @@ const Header = () => {
                 Home
               </Link>
             </li>
-            <li>
-              <Link
-                className={buildLinkClassName({ pathname, slug: "/notes" })}
-                href="/notes/filter/All"
-              >
-                Tags Menu
-              </Link>
-            </li>
+            {isAuthenticated && (
+              <li>
+                <Link
+                  className={buildLinkClassName({ pathname, slug: "/notes" })}
+                  href="/notes/filter/All"
+                >
+                  Tags Menu
+                </Link>
+              </li>
+            )}
             <AuthNavigation />
           </ul>
         </nav>
