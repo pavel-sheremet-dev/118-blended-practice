@@ -1,68 +1,48 @@
-import axios from 'axios';
-import { Post } from '@/types/post';
-import { User } from '@/types/user';
+import axios from "axios";
+import { Note, NewNote, Tag } from "@/types/note";
 
-axios.defaults.baseURL = 'https://jsonplaceholder.typicode.com';
+axios.defaults.baseURL = "https://notehub-public.goit.study/api";
 
-export type FetchPostsResponse = Post[];
+axios.defaults.headers.common.Authorization = `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`;
 
-export const fetchPosts = async ({
-  searchText,
-  page,
-  userId,
-}: {
+export interface FetchNotesResponse {
+  notes: Note[];
+  totalPages: number;
+}
+
+interface FetchNotesProps {
   searchText: string;
   page: number;
-  userId?: string;
-}): Promise<{ posts: Post[]; totalCount: number }> => {
-  const response = await axios.get<FetchPostsResponse>('/posts', {
+  tag: "" | Tag;
+}
+
+export const fetchNotes = async ({
+  page,
+  searchText,
+  tag,
+}: FetchNotesProps) => {
+  const response = await axios.get<FetchNotesResponse>("/notes", {
     params: {
-      userId,
-      ...(searchText !== '' && { q: searchText }),
-      _page: page,
-      _limit: 8,
+      search: searchText,
+      page,
+      perPage: 12,
+      ...(tag !== "" ? { tag } : {}),
     },
   });
-  const totalCount = Number(response.headers['x-total-count']);
-  return { posts: response.data, totalCount };
-};
-
-interface NewPostContent {
-  title: string;
-  body: string;
-}
-
-interface EditedPost {
-  id: number;
-  title: string;
-  body: string;
-}
-
-export const createPost = async (newPost: NewPostContent) => {
-  const response = await axios.post<Post>('/posts', newPost);
   return response.data;
 };
 
-export const editPost = async (newDataPost: EditedPost) => {
-  const response = await axios.patch<Post>(`/posts/${newDataPost.id}`, newDataPost);
+export const createNote = async (newNote: NewNote) => {
+  const response = await axios.post<Note>("/notes", newNote);
   return response.data;
 };
 
-export const deletePost = async (postId: number) => {
-  const response = await axios.delete<Post>(`/posts/${postId}`);
+export const deleteNote = async (noteId: string) => {
+  const response = await axios.delete<Note>(`/notes/${noteId}`);
   return response.data;
 };
 
-export const fetchPostById = async (id: string) => {
-  const { data } = await axios.get<Post>(`/posts/${id}`);
-
-  return data;
+export const fetchNoteById = async (noteId: string) => {
+  const response = await axios.get<Note>(`/notes/${noteId}`);
+  return response.data;
 };
-
-export const fetchUsers = async () => {
-  const { data } = await axios.get<User[]>('/users');
-
-  return data;
-};
-
-export const fetchUserById = async () => {};

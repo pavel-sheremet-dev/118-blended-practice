@@ -1,20 +1,21 @@
-'use client';
+"use client";
 
-import { isServer, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { useState } from "react";
 
-let browserQueryClient: QueryClient | undefined = undefined;
-
-function getQueryClient() {
-  if (isServer) {
-    return new QueryClient();
-  } else {
-    if (!browserQueryClient) browserQueryClient = new QueryClient();
-    return browserQueryClient;
-  }
+interface TanstackProviderProps {
+  children: React.ReactNode;
 }
 
-export default function TanStackProvider({ children }: { children: React.ReactNode }) {
-  const queryClient = getQueryClient();
+const TanstackProvider = ({ children }: TanstackProviderProps) => {
+  const [client] = useState(() => new QueryClient());
+  return (
+    <QueryClientProvider client={client}>
+      <ReactQueryDevtools />
+      {children}
+    </QueryClientProvider>
+  );
+};
 
-  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
-}
+export default TanstackProvider;

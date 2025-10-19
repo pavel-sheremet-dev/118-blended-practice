@@ -1,18 +1,15 @@
-import css from './Footer.module.css';
+import Container from "../Container/Container";
 
-export default function Footer() {
+import styles from "./Footer.module.css";
+
+const Footer = () => {
   return (
-    <footer className={css.footer}>
-      <div className={css.content}>
-        <p className={css.text}>© {new Date().getFullYear()} Postly. All rights reserved.</p>
-        <div className={css.wrap}>
-          <p className={css.text}>Developer: GoIT student</p>
-          <p className={css.text}>
-            Contact us: &nbsp;
-            <a href="mailto:student@postly.app">student@postly.app</a>
-          </p>
-        </div>
-      </div>
+    <footer className={styles.footer}>
+      <Container className={styles.box}>
+        My App | {new Date().getFullYear()}
+      </Container>
     </footer>
   );
-}
+};
+
+export default Footer;

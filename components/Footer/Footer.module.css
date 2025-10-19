@@ -1,47 +1,10 @@
-/* components/Footer.module.css */
-
 .footer {
-  border-top: 1px solid #368a01;
-  background: #363638;
-  display: flex;
-  padding: 20px 0px;
+  padding: 8px 0;
+  border-top: 1px solid #484848;
+}
 
+.box {
+  display: flex;
   align-items: center;
-
-  flex-direction: column;
   justify-content: center;
-
-  gap: 12px;
-}
-
-.wrap {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 48px;
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
-
-.text {
-  color: #fff;
-  font-family: 'Open Sans';
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-}
-.footer a {
-  color: #368a01;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.footer a:hover {
-  text-decoration: underline;
 }

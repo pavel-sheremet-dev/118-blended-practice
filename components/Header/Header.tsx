@@ -1,28 +1,49 @@
-import Link from 'next/link';
+"use client";
 
-import css from './Header.module.css';
-import TagsMenu from '../UsersMenu/UsersMenu';
+import Link from "next/link";
+import Container from "../Container/Container";
 
-export default function Header() {
+import styles from "./Header.module.css";
+
+import clsx from "clsx";
+import { usePathname } from "next/navigation";
+
+import AuthNavigation from "../AuthNavigation/AuthNavigation";
+import { buildLinkClassName } from "@/lib/buildLinkClassName/buildLinkClassName";
+
+const Header = () => {
+  const pathname = usePathname();
+
   return (
-    <header className={css.header}>
-      <div className={css.headerContainer}>
-        <Link href="/" aria-label="Home" className={css.headerLink}>
-          Postly
+    <header className={styles.header}>
+      <Container className={styles.box}>
+        <Link href="/" className={styles.logo}>
+          APP LOGO
         </Link>
-        <nav aria-label="Main Navigation">
-          <ul className={css.navigation}>
-            <li className={css.navigationItem}>
-              <Link className={css.navigationLink} href="/">
+        <nav>
+          <ul className={styles.list}>
+            <li>
+              <Link
+                className={clsx(styles.link, pathname === "/" && styles.active)}
+                href="/"
+              >
                 Home
               </Link>
             </li>
-            <li className={css.navigationItem}>
-              <TagsMenu />
+            <li>
+              <Link
+                className={buildLinkClassName({ pathname, slug: "/notes" })}
+                href="/notes/filter/All"
+              >
+                Tags Menu
+              </Link>
             </li>
+            <AuthNavigation />
           </ul>
         </nav>
-      </div>
+      </Container>
     </header>
   );
-}
+};
+
+export default Header;

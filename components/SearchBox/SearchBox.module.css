@@ -1,20 +1,9 @@
-.input {
-  border-radius: 8px;
-  border: 1px solid #fff;
-  display: flex;
-  width: 240px;
-  height: 44px;
-  padding: 8px 24px;
-  align-items: center;
-  background-color: transparent;
-  color: #fff;
-  font-family: 'Open Sans';
+.searchInput {
+  flex: 1;
+  padding: 8px 12px;
   font-size: 16px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-}
-
-.input::placeholder {
-  color: #fff;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #212529;
 }
